@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#07070F">
+<title>Battle Arena Tournaments</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--ink:#07070F;--panel:#11111E;--raise:#1A1A2E;--line:#25253D;--violet:#8B5CF6;--blue:#3B82F6;--text:#ECEDFA;--muted:#9091B3;--ok:#34D399;--bad:#F87171;color-scheme:dark}
+*{box-sizing:border-box;margin:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--ink);color:var(--text);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh;-webkit-tap-highlight-color:transparent}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--ink)}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.wrap{max-width:480px;margin:0 auto;padding-bottom:calc(92px + env(safe-area-inset-bottom,0px))}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;align-items:center;gap:12px;padding:12px 16px;background:rgba(7,7,15,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.logo{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(135deg,var(--violet),var(--blue));font:800 18px "Barlow Condensed",sans-serif;color:#fff}
+.brand{font:800 22px/1 "Barlow Condensed",sans-serif}
+.disp{font-family:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;font-weight:800;line-height:1.05}
+.h1{font-size:34px;margin:6px 0 4px}
+.h2{font-size:24px;margin:22px 0 10px}
+.h3{font-size:22px}
+.big{font-size:36px;line-height:1}
+.hero{padding:26px 16px 18px;background:radial-gradient(120% 90% at 85% 0%,rgba(139,92,246,.35),transparent 60%),radial-gradient(100% 80% at 0% 100%,rgba(59,130,246,.22),transparent 60%);border-bottom:1px solid var(--line)}
+.hero h1{font-size:52px;line-height:.95}
+.lead{color:var(--muted);margin:8px 0 14px;max-width:34ch}
+.bracket{width:100%;height:auto;margin-top:12px}
+.bracket path{stroke-dasharray:1;animation:draw 1.2s ease-out both}
+@keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+.pad{padding:16px}
+.back{margin:12px 16px 0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:12px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.muted{color:var(--muted)}
+.sm{font-size:13px}
+.okt{color:var(--ok)}
+.pill{display:inline-block;font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px;background:var(--raise);color:#CFC8FF;margin:0 6px 6px 0}
+.pill.ok{background:#0F2A23;color:#A7F3D0}.pill.warn{background:#2B230C;color:#FDE68A}
+.bar{height:6px;background:var(--raise);border-radius:6px;overflow:hidden;margin:10px 0}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--violet),var(--blue))}
+.btn{font:inherit;font-weight:700;min-height:44px;padding:10px 16px;border:0;border-radius:10px;background:linear-gradient(135deg,var(--violet),var(--blue));color:#fff;cursor:pointer}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--text)}
+.btn.bad{background:#3A1820;color:#FFB4B4}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.sm{min-height:36px;padding:6px 12px;font-size:14px}
+.grid2,.grid3{display:grid;gap:10px}
+.grid2{grid-template-columns:1fr 1fr}
+.grid3{grid-template-columns:repeat(3,1fr)}
+.tile{font:inherit;font-weight:700;color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;text-align:left;cursor:pointer;min-height:72px}
+.stat{text-align:center;margin:0}
+.stat b{display:block;font:800 28px/1 "Barlow Condensed",sans-serif}
+.stat span{color:var(--muted);font-size:13px}
+.wallet{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.chips{display:flex;gap:8px;overflow-x:auto;margin-bottom:12px;padding-bottom:4px}
+.chip{flex:none;font:inherit;font-size:14px;min-height:36px;padding:6px 14px;border-radius:99px;border:1px solid var(--line);background:var(--panel);color:var(--muted);cursor:pointer}
+.chip[aria-pressed=true]{background:var(--violet);border-color:var(--violet);color:#fff}
+.list{padding-left:20px;display:grid;gap:8px;margin:8px 0 14px}
+.podium{list-style:none;padding:0;display:grid;gap:8px;margin-top:10px}
+.podium li{display:flex;gap:12px;align-items:center;padding:10px 12px;background:var(--raise);border-radius:10px;font-weight:600}
+.podium span{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--violet),var(--blue));font-size:13px}
+.facts{display:grid;grid-template-columns:auto 1fr;gap:8px 16px}
+.facts dt{color:var(--muted)}
+.facts dd{margin:0;text-align:right;font-weight:600}
+.avatar{width:64px;height:64px;border-radius:16px;display:grid;place-items:center;flex:none;background:linear-gradient(135deg,var(--violet),var(--blue));font:800 26px "Barlow Condensed",sans-serif;color:#fff}
+.lbl{display:block;font-size:14px;color:var(--muted);margin:12px 0 6px}
+input,select{font:inherit;color:var(--text);background:#0C0C18;border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%;min-height:44px}
+.menu{border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.menu-row{display:block;width:100%;font:inherit;color:var(--text);background:var(--panel);border:0;border-bottom:1px solid var(--line);padding:14px 16px;text-align:left;cursor:pointer;min-height:48px}
+.menu-row:last-child{border-bottom:0}
+.setting{padding:4px 0}
+.sw{flex:none;width:48px;height:28px;border-radius:99px;border:1px solid var(--line);background:var(--raise);position:relative;cursor:pointer}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s}
+.sw[aria-checked=true]{background:linear-gradient(135deg,var(--violet),var(--blue));border-color:transparent}
+.sw[aria-checked=true]::after{transform:translateX(20px)}
+.empty{text-align:center}
+.empty p{color:var(--muted);margin-bottom:12px}
+nav{position:fixed;left:0;right:0;bottom:0;max-width:480px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px 6px calc(8px + env(safe-area-inset-bottom,0px));background:#0C0C18;border-top:1px solid var(--line);z-index:6}
+nav button{font:inherit;font-size:12px;font-weight:600;color:var(--muted);background:none;border:0;border-top:3px solid transparent;padding:8px 0 4px;cursor:pointer;min-height:48px;border-radius:8px}
+nav button[aria-current=page]{color:var(--text);border-top-color:var(--violet);background:linear-gradient(180deg,rgba(139,92,246,.18),transparent)}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(100px + env(safe-area-inset-bottom,0px));background:var(--raise);border:1px solid var(--violet);padding:10px 14px;border-radius:10px;opacity:0;transition:opacity .2s;pointer-events:none;width:max-content;max-width:90%;z-index:9;font-size:14px}
+#toast.on{opacity:1}
+.compact .card{padding:12px}
+.compact .pad{padding:12px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<div class="logo" aria-hidden="true">BA</div>
+<div><div class="brand">Battle Arena</div><div class="muted sm">Tournaments, demo edition</div></div>
+</header>
+<main id="app"></main>
+</div>
+<nav id="nav" aria-label="Main">
+<button data-a="go" data-v="home">Home</button>
+<button data-a="go" data-v="tours">Events</button>
+<button data-a="go" data-v="matches">My matches</button>
+<button data-a="go" data-v="results">Results</button>
+<button data-a="go" data-v="profile">Profile</button>
+</nav>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=n=>Number(n).toLocaleString('en-US');
+const LBL={open:'Open',full:'Full',completed:'Finished'};
+const BACK={detail:['tours','Back to events'],wallet:['profile','Back to profile'],history:['profile','Back to profile'],rules:['profile','Back to profile'],settings:['profile','Back to profile'],admin:['profile','Back to profile']};
+const NAVOF={home:'home',tours:'tours',detail:'tours',matches:'matches',results:'results',profile:'profile',wallet:'profile',history:'profile',rules:'profile',settings:'profile',admin:'profile'};
+const RULES=[
+'Create a free demo profile. No payment details are needed.',
+'Check in 15 minutes before your match starts.',
+'Use only your own account. Sharing accounts is not allowed.',
+'No cheats, bots, or exploits. Violations remove you from the event.',
+'Results are decided by the event admins and posted in Results.',
+'Demo coins have no cash value and cannot be withdrawn.'
+];
+const BRACKET=`<svg class="bracket" viewBox="0 0 220 76" aria-hidden="true"><defs><linearGradient id="bg" x1="0" x2="1"><stop offset="0" stop-color="#8B5CF6"/><stop offset="1" stop-color="#3B82F6"/></linearGradient></defs><path pathLength="1" fill="none" stroke="url(#bg)" stroke-width="2.5" stroke-linecap="round" d="M4 10H60V30H4M4 50H60V70H4M60 20H120V60H60M120 40H160M160 40H216"/></svg>`;
+const SEED=()=>({
+view:'home',tid:null,filter:'all',coins:500,name:'PixelWolf',
+settings:{reminders:true,compact:false},
+joined:[2],
+tx:[{t:'Welcome demo bonus',a:500}],
+tours:[
+{id:1,name:'Weekend Cup Alpha',game:'Nova Strike',date:'Sat, Dec 5 at 6:00 PM',fee:50,prize:2000,slots:32,filled:21,status:'open',format:'Single elimination',podium:[]},
+{id:2,name:'Night Sprint Series',game:'Neon Drift',date:'Tue, Dec 8 at 8:00 PM',fee:0,prize:500,slots:16,filled:9,status:'open',format:'Best of three rounds',podium:[]},
+{id:3,name:'Iron Siege Squad Clash',game:'Iron Siege',date:'Sat, Dec 12 at 7:00 PM',fee:100,prize:5000,slots:16,filled:16,status:'full',format:'Double elimination',podium:[]},
+{id:4,name:'Rookie Rumble',game:'Starfall Arena',date:'Mon, Dec 14 at 5:00 PM',fee:25,prize:750,slots:24,filled:11,status:'open',format:'Group stage, then playoffs',podium:[]},
+{id:5,name:'Autumn Brawl Open',game:'Nova Strike',date:'Finished Nov 14',fee:25,prize:1200,slots:16,filled:16,status:'completed',format:'Single elimination',podium:['Crimson Foxes','Glass Hornets','Static Owls']}
+],
+history:[
+{ev:'Autumn Brawl Open, round 1',opp:'Silver Kites',res:'W',score:'2–0'},
+{ev:'Autumn Brawl Open, round 2',opp:'Glass Hornets',res:'L',score:'1–2'},
+{ev:'Night Sprint, group match',opp:'Neon Owls',res:'W',score:'3–1'},
+{ev:'Rookie Rumble, practice bracket',opp:'Amber Lynx',res:'W',score:'2–1'},
+{ev:'Iron Siege, friendly practice',opp:'Velvet Cobras',res:'L',score:'0–2'}
+]
+});
+let S=SEED();
+
+const find=id=>S.tours.find(t=>t.id===id);
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('on'),2200);}
+function go(v){S.view=v;S.tid=null;render();window.scrollTo(0,0);}
+function openT(id){S.view='detail';S.tid=id;render();window.scrollTo(0,0);}
+
+function join(id){
+const t=find(id); if(!t) return;
+if(S.joined.includes(id)) return toast('You already joined this event.');
+if(t.status!=='open'||t.filled>=t.slots) return toast('This event is full.');
+if(S.coins<t.fee) return toast('Not enough demo coins. Add coins in Wallet.');
+S.coins-=t.fee; if(t.fee) S.tx.unshift({t:'Entry: '+t.name,a:-t.fee});
+S.joined.push(id); t.filled++; if(t.filled>=t.slots) t.status='full';
+toast('You joined '+t.name); render();
+}
+function leave(id){
+const t=find(id); S.joined=S.joined.filter(x=>x!==id);
+if(t){
+t.filled=Math.max(0,t.filled-1);
+if(t.status==='full'&&t.filled<t.slots) t.status='open';
+if(t.fee){S.coins+=t.fee;S.tx.unshift({t:'Refund: '+t.name,a:t.fee});}
+}
+toast('You left the event'); render();
+}
+function create(){
+const name=$('#an').value.trim();
+if(!name) return toast('Add an event name first.');
+const slots=Math.max(2,parseInt($('#as').value)||16);
+const fee=Math.max(0,parseInt($('#af').value)||0);
+S.tours.push({id:Date.now(),name,game:$('#ag').value.trim()||'Sample game',date:'Date to be set',fee,prize:1000,slots,filled:0,status:'open',format:'Single elimination',podium:[]});
+toast('Event created'); render();
+}
+
+function tCard(t){
+const joined=S.joined.includes(t.id), pct=Math.min(100,Math.round(t.filled/t.slots*100));
+return `<article class="card">
+<div><span class="pill">${esc(t.game)}</span><span class="pill ${t.status==='open'?'ok':t.status==='full'?'warn':''}">${LBL[t.status]}</span></div>
+<h3 class="disp h3" style="margin:6px 0 2px">${esc(t.name)}</h3>
+<p class="muted sm">${esc(t.date)}</p>
+<div class="row sm" style="margin-top:6px"><span>${t.fee?'Entry '+fmt(t.fee)+' coins':'Free entry'}</span><span>Prize ${fmt(t.prize)} coins</span></div>
+<div class="bar"><i style="width:${pct}%"></i></div>
+<div class="row"><span class="muted sm">${t.filled} of ${t.slots} players</span><button class="btn ghost sm" data-a="open" data-id="${t.id}">View</button></div>
+${joined?'<p class="sm okt" style="margin-top:8px">You’re in this event</p>':''}
+</article>`;
+}
+function joinBtn(t){
+if(S.joined.includes(t.id)) return `<button class="btn bad" style="width:100%" data-a="leave" data-id="${t.id}">Leave and refund entry</button>`;
+if(t.status!=='open') return `<button class="btn" style="width:100%" disabled>${t.status==='full'?'Event is full':'Event finished'}</button>`;
+return `<button class="btn" style="width:100%" data-a="join" data-id="${t.id}">Join for ${t.fee?fmt(t.fee)+' demo coins':'free'}</button>`;
+}
+
+const V={
+home(){
+const up=S.tours.find(t=>t.status==='open');
+const next=S.joined.map(find).filter(Boolean).slice(0,2);
+return `<section class="hero"><h1 class="disp">Battle Arena</h1><p class="lead">Join sample tournaments with demo coins. Nothing here uses real money.</p>${BRACKET}</section>
+<section class="pad">
+${S.settings.reminders&&next.length?`<div class="card" style="border-color:var(--violet)"><b>Check-in reminder</b><p class="muted sm">Be ready 15 minutes before your next event. Turn this off in Settings.</p></div>`:''}
+<div class="card wallet"><div><div class="muted sm">Demo coin balance</div><div class="disp big">${fmt(S.coins)}</div></div><button class="btn ghost sm" data-a="go" data-v="wallet">Open wallet</button></div>
+<div class="grid2" style="margin-bottom:12px">
+<button class="tile" data-a="go" data-v="tours">Browse events</button>
+<button class="tile" data-a="go" data-v="results">Results</button>
+<button class="tile" data-a="go" data-v="rules">Rules</button>
+<button class="tile" data-a="go" data-v="history">Match history</button>
+</div>
+<h2 class="disp h2">Featured event</h2>
+${up?tCard(up):'<p class="muted">No open events right now.</p>'}
+<h2 class="disp h2">Your events</h2>
+${next.length?next.map(tCard).join(''):`<div class="card empty"><p>You haven’t joined anything yet.</p><button class="btn" data-a="go" data-v="tours">Browse events</button></div>`}
+</section>`;
+},
+tours(){
+const f=S.filter, list=S.tours.filter(t=>f==='all'||t.status===f);
+return `<section class="pad"><h1 class="disp h1">Tournaments</h1><p class="muted">Pick an event, read the details, then join with demo coins.</p>
+<div class="chips">${['all','open','full','completed'].map(k=>`<button class="chip" aria-pressed="${f===k}" data-a="filter" data-v="${k}">${k==='all'?'All':LBL[k]}</button>`).join('')}</div>
+${list.map(tCard).join('')||'<p class="muted">Nothing matches this filter.</p>'}
+</section>`;
+},
+detail(){
+const t=find(S.tid); if(!t) return V.tours();
+return `<section class="pad"><h1 class="disp h1">${esc(t.name)}</h1>
+<div style="margin:10px 0 14px"><span class="pill">${esc(t.game)}</span><span class="pill">${esc(t.format)}</span><span class="pill ${t.status==='open'?'ok':t.status==='full'?'warn':''}">${LBL[t.status]}</span></div>
+<div class="card"><dl class="facts"><dt>Starts</dt><dd>${esc(t.date)}</dd><dt>Entry</dt><dd>${t.fee?fmt(t.fee)+' demo coins':'Free'}</dd><dt>Prize pool</dt><dd>${fmt(t.prize)} demo coins</dd><dt>Spots left</dt><dd>${Math.max(0,t.slots-t.filled)} of ${t.slots}</dd></dl>
+<div class="bar"><i style="width:${Math.min(100,t.filled/t.slots*100)}%"></i></div></div>
+${joinBtn(t)}
+<h2 class="disp h2">Key rules</h2>
+<ul class="list">${RULES.slice(0,3).map(r=>`<li>${r}</li>`).join('')}</ul>
+<button class="btn ghost" style="width:100%" data-a="go" data-v="rules">Read all rules</button>
+</section>`;
+},
+matches(){
+const list=S.joined.map(find).filter(Boolean);
+return `<section class="pad"><h1 class="disp h1">My matches</h1><p class="muted">Events you have joined. Check in 15 minutes early.</p>
+${list.length?list.map(t=>`<article class="card"><div class="row"><h3 class="disp h3">${esc(t.name)}</h3><span class="pill ok">Joined</span></div><p class="muted sm">${esc(t.game)}, ${esc(t.date)}</p><div class="row" style="margin-top:12px"><button class="btn ghost sm" data-a="open" data-id="${t.id}">Details</button><button class="btn bad sm" data-a="leave" data-id="${t.id}">Leave event</button></div></article>`).join(''):`<div class="card empty"><p>No joined events yet.</p><button class="btn" data-a="go" data-v="tours">Find a tournament</button></div>`}
+</section>`;
+},
+history(){
+const w=S.history.filter(h=>h.res==='W').length, l=S.history.length-w, rate=Math.round(w/S.history.length*100);
+return `<section class="pad"><h1 class="disp h1">Match history</h1><p class="muted sm">Sample matches for demo purposes.</p>
+<div class="grid3" style="margin:14px 0"><div class="card stat"><b>${w}</b><span>Wins</span></div><div class="card stat"><b>${l}</b><span>Losses</span></div><div class="card stat"><b>${rate}%</b><span>Win rate</span></div></div>
+${S.history.map(h=>`<div class="card row"><div><div>${esc(h.ev)}</div><div class="muted sm">vs ${esc(h.opp)}</div></div><div style="text-align:right"><span class="pill ${h.res==='W'?'ok':'bad'}">${h.res==='W'?'Win':'Loss'}</span><div class="sm">${h.score}</div></div></div>`).join('')}
+</section>`;
+},
+results(){
+const done=S.tours.filter(t=>t.status==='completed');
+return `<section class="pad"><h1 class="disp h1">Results</h1><p class="muted">Finished events and their podiums. Sample data.</p>
+${done.length?done.map(t=>`<article class="card"><h3 class="disp h3">${esc(t.name)}</h3><p class="muted sm">${esc(t.game)}, prize pool ${fmt(t.prize)} demo coins</p>${t.podium.length?`<ol class="podium">${t.podium.map((p,i)=>`<li><span>${i+1}</span>${esc(p)}</li>`).join('')}</ol>`:'<p class="muted">Podium pending.</p>'}</article>`).join(''):'<p class="muted">No finished events yet.</p>'}
+</section>`;
+},
+rules(){
+return `<section class="pad"><h1 class="disp h1">Rules</h1><p class="muted">These rules apply to every sample event.</p><ul class="list">${RULES.map(r=>`<li>${r}</li>`).join('')}</ul></section>`;
+},
+wallet(){
+return `<section class="pad"><h1 class="disp h1">Demo wallet</h1>
+<div class="card wallet"><div><div class="muted sm">Balance</div><div class="disp big">${fmt(S.coins)} coins</div></div></div>
+<p class="muted sm">Demo coins have no cash value. This app has no deposits, withdrawals, or payments.</p>
+<button class="btn" style="width:100%" data-a="addcoins">Add 100 demo coins</button>
+<h2 class="disp h2">Activity</h2>
+${S.tx.map(x=>`<div class="card row"><span>${esc(x.t)}</span><b style="color:${x.a<0?'var(--bad)':'var(--ok)'}">${x.a>0?'+':''}${fmt(x.a)}</b></div>`).join('')||'<p class="muted">No activity yet.</p>'}
+</section>`;
+},
+profile(){
+const w=S.history.filter(h=>h.res==='W').length;
+const items=[['wallet','Demo wallet'],['history','Match history'],['rules','Rules'],['settings','Settings'],['admin','Admin dashboard']];
+return `<section class="pad">
+<div class="row"><div class="avatar">${esc(S.name.slice(0,2).toUpperCase())}</div><div style="flex:1"><h1 class="disp h2" style="margin:0">${esc(S.name)}</h1><span class="muted sm">Demo player profile</span></div></div>
+<div class="grid3" style="margin-top:16px"><div class="card stat"><b>${S.joined.length}</b><span>Joined</span></div><div class="card stat"><b>${S.history.length}</b><span>Matches</span></div><div class="card stat"><b>${w}</b><span>Wins</span></div></div>
+<label class="lbl" for="pname">Display name</label>
+<input id="pname" value="${esc(S.name)}" maxlength="16">
+<p class="muted sm">Saves when you leave the field.</p>
+<div class="menu" style="margin-top:18px">${items.map(([v,l])=>`<button class="menu-row" data-a="go" data-v="${v}">${l}</button>`).join('')}</div>
+</section>`;
+},
+settings(){
+const T=(k,l,d)=>`<div class="row setting"><div><div>${l}</div><div class="muted sm">${d}</div></div><button class="sw" role="switch" aria-checked="${!!S.settings[k]}" aria-label="${l}" data-a="toggle" data-v="${k}"></button></div>`;
+return `<section class="pad"><h1 class="disp h1">Settings</h1>
+<div class="card">${T('reminders','Check-in reminder','Show a reminder card on Home')}${T('compact','Compact layout','Tighter spacing in cards')}</div>
+<div class="card"><div class="row"><div><div>Reset demo data</div><div class="muted sm">Restores sample events, coins, and joins</div></div><button class="btn bad sm" data-a="reset">Reset</button></div></div>
+<p class="muted sm">Settings and demo data last only until you refresh this page. Nothing is saved to a server.</p>
+</section>`;
+},
+admin(){
+const open=S.tours.filter(t=>t.status==='open').length, entries=S.tours.reduce((a,t)=>a+t.filled,0);
+return `<section class="pad"><h1 class="disp h1">Admin dashboard</h1>
+<p class="muted">Demo panel with sample data. There is no login or permission check, so this is a preview only.</p>
+<div class="grid3" style="margin:14px 0"><div class="card stat"><b>${S.tours.length}</b><span>Events</span></div><div class="card stat"><b>${open}</b><span>Open</span></div><div class="card stat"><b>${entries}</b><span>Entries</span></div></div>
+${S.tours.map(t=>`<article class="card"><div class="row"><b>${esc(t.name)}</b><button class="btn bad sm" data-a="del" data-id="${t.id}">Delete</button></div>
+<p class="muted sm">${esc(t.game)}, ${t.filled} of ${t.slots} filled</p>
+<label class="lbl" for="s${t.id}">Status</label>
+<select id="s${t.id}" data-a="status" data-id="${t.id}">${Object.keys(LBL).map(s=>`<option value="${s}"${t.status===s?' selected':''}>${LBL[s]}</option>`).join('')}</select></article>`).join('')}
+<h2 class="disp h2">Create a sample event</h2>
+<div class="card">
+<label class="lbl" for="an">Event name</label><input id="an" value="Sample Cup">
+<label class="lbl" for="ag">Game</label><input id="ag" value="Neon Drift">
+<div class="grid2"><div><label class="lbl" for="af">Entry coins</label><input id="af" type="number" min="0" value="0"></div><div><label class="lbl" for="as">Player slots</label><input id="as" type="number" min="2" value="16"></div></div>
+<button class="btn" style="width:100%;margin-top:14px" data-a="create">Create event</button>
+</div>
+</section>`;
+}
+};
+
+function render(){
+const v=S.view;
+let html=(V[v]||V.home)();
+const b=BACK[v];
+if(b) html=`<div class="back"><button class="btn ghost sm" data-a="go" data-v="${b[0]}">${b[1]}</button></div>`+html;
+$('#app').innerHTML=html;
+document.querySelectorAll('#nav button').forEach(x=>{
+if(x.dataset.v===NAVOF[v]) x.setAttribute('aria-current','page'); else x.removeAttribute('aria-current');
+});
+document.body.classList.toggle('compact',!!S.settings.compact);
+}
+
+document.addEventListener('click',e=>{
+const el=e.target.closest('[data-a]'); if(!el) return;
+const {a,v,id}=el.dataset, n=id?Number(id):null;
+if(a==='go') go(v);
+else if(a==='open') openT(n);
+else if(a==='filter'){S.filter=v;render();}
+else if(a==='join') join(n);
+else if(a==='leave') leave(n);
+else if(a==='addcoins'){S.coins+=100;S.tx.unshift({t:'Demo top-up (free)',a:100});toast('Added 100 demo coins');render();}
+else if(a==='toggle'){S.settings[v]=!S.settings[v];render();}
+else if(a==='del'){S.tours=S.tours.filter(t=>t.id!==n);S.joined=S.joined.filter(x=>x!==n);toast('Event deleted');render();}
+else if(a==='create') create();
+else if(a==='reset'){S=SEED();S.view='settings';toast('Demo data reset');render();}
+});
+document.addEventListener('change',e=>{
+const el=e.target;
+if(el.dataset.a==='status'){
+const t=find(Number(el.dataset.id));
+if(t){t.status=el.value;toast('Status set to '+LBL[el.value]);render();}
+}
+if(el.id==='pname'){S.name=el.value.trim().slice(0,16)||S.name;toast('Name saved');}
+});
+render();
+</script>
+</body>
+</html>
